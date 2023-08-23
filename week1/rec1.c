@@ -8,7 +8,7 @@ int main (void) {
     
     while(flag) { // while true
         printf("Please enter an operation (+, -, *, / or q to quit): ");
-        scanf("%c", &operation);
+        scanf(" %c", &operation);
 
         switch(operation) {
             case '+':
@@ -16,28 +16,28 @@ int main (void) {
                 scanf("%f", &firstNum);
                 printf("\nEnter the second number: ");
                 scanf("%f", &secondNum);
-                printf("%f + %f = %.2f\n", firstNum, secondNum, firstNum+secondNum);
+                printf("\n%f + %f = %.2f\n\n", firstNum, secondNum, firstNum+secondNum);
                 break;
             case '-':
                 printf("Enter the first number: ");
                 scanf("%f", &firstNum);
                 printf("Enter the second number: ");
                 scanf("%f", &secondNum);
-                printf("%f - %f = %.2f\n", firstNum, secondNum, firstNum-secondNum);
+                printf("\n%f - %f = %.2f\n\n", firstNum, secondNum, firstNum-secondNum);
                 break;
             case '*':
                 printf("Enter the first number: ");
                 scanf("%f", &firstNum);
                 printf("Enter the second number: ");
                 scanf("%f", &secondNum);
-                printf("%f * %f = %.2f\n", firstNum, secondNum, firstNum*secondNum);
+                printf("\n%f * %f = %.2f\n\n", firstNum, secondNum, firstNum*secondNum);
                 break;
             case '/':
                 printf("Enter the first number: ");
                 scanf("%f", &firstNum);
                 printf("Enter the second number: ");
                 scanf("%f", &secondNum);
-                printf("%f / %f = %.2f\n", firstNum, secondNum, firstNum/secondNum);
+                printf("\n%f / %f = %.2f\n\n", firstNum, secondNum, firstNum/secondNum);
                 break;
             case 'q':
                 flag = 0;
