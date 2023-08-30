@@ -1,11 +1,11 @@
 #include <stdio.h>
 
 int main(void){
-	int a = 10;
+	int a = 100;
 	int b = 10;
 	int c = a+b;
 	int d = a-b;
-	int e = a/d;
+	int e = b/a;
 	int f = a*b;
 	int i;
 	char *day[7] = {
