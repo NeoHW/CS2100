@@ -1,7 +1,7 @@
 # arrayCount.asm
         .data
 arrayA: .word 11, 0, 31, 22, 9, 17, 6, 9 # arrayA has 8 values
-count:  .word 8                          # number of array elements
+count:  .word 999                        # dummy value
 
         .text
 
