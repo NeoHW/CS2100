@@ -4,7 +4,9 @@ void display(int);
 
 int main() {
 	int ageArray[] = { 2, 15, 4, 23 };
-	display(ageArray[2]);
+	display(ageArray[0]);
+    int arrLength = sizeof(ageArray) / sizeof(ageArray[0]);
+    printf("Size of the array is %d\n", arrLength);
 	return 0;
 }
 

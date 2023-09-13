@@ -52,7 +52,15 @@ int hexVal(char hex) {
 }
 
 int hexToDecimal(char hex[], size_t size) {
-	// complete the function body
 	
-	return 0;
+	int sum = 0;
+    int base = 1;
+    // char* ptr = &hex[size-1];
+	char* ptr = hex + size - 1;
+    while (ptr >= hex) {
+        sum += hexVal(*ptr) * base;
+        ptr--;
+        base *= 16;
+    }
+	return sum;
 }
