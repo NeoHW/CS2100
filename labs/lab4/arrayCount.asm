@@ -9,7 +9,7 @@ main:
         # code to set up the variable mappings
                 la $t0, arrayA          # &A[]
                 addi $t1, $t0, 0        # &A[i]
-                addi $t2, $t0, 28       # address of last element
+                addi $t2, $t0, 32       # stop at 8*4=32
                 add  $s0, $zero, $zero  # final result in $s0
                 lw $t8, count           # map count -> $t8, can use la too?
         
@@ -19,7 +19,7 @@ main:
                 add $t3, $v0, $zero     # store number in $t3 (power-of-two)
         
         # code for counting multiples of X in arrayA
-                add $t5, $t3, $zero     # creating the bitmask
+                addi $t5, $t3, -1       # bitmask
         loop:   bge $t1, $t2, end
                 lw $t4, 0($t1)          # $t4 is A[i]
                 and $t6, $t4, $t5       # $t6 is remainder
