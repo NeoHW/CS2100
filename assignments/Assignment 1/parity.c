@@ -60,6 +60,14 @@ uint8_t hex2dec(char *byte) {
 // You may want to look at the strtok function.
 
 void string2bytes(char *str, uint8_t *bytes, uint8_t *len) {
+    *len = 0;
+    char* token = strtok(str, " ");
+
+    while (token != NULL) {
+        bytes[*len] = hex2dec(token);
+        token = strtok(NULL, " ");
+        (*len)++;
+    }
 }
 
 // Receives a string of bytes in hexadecimal, and returns the parity
@@ -67,5 +75,9 @@ void string2bytes(char *str, uint8_t *bytes, uint8_t *len) {
 // str = String of bytes in hexadecimal separated by spaces
 // E.g. "08 1C 4B 1E". Do not use the 0x prefix for the bytes.
 uint8_t calculateParity(char *str) {
-    return 0;
+    uint8_t bytes[1024];
+    uint8_t len;
+
+    string2bytes(str, bytes, &len);
+    return findParity(bytes, len);
 }
