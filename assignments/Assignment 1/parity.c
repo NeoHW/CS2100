@@ -7,7 +7,11 @@
 // Calculate and return the parity byte 
 // for an array of bytes, using ODD parity.
 uint8_t findParity(uint8_t *array, uint8_t len) {
-    return 0;
+    uint8_t start = 255; // FF
+    for (int i = 0; i < len; i++) {
+        start ^= array[i];
+    }
+    return start;
 }
 
 // (Done for you). 
@@ -44,11 +48,7 @@ uint8_t finddec(char nibble) {
 // the string "3F".
 
 uint8_t hex2dec(char *byte) {
-    // Converts 2-digit hexadecimal number in "byte"
-    // into decimal. Complete this function in a 
-    // "return" statement. E.g. return bytes[1] + byte[2];
-    // No credit if you use >1 line.
-    return 0;
+    return finddec(byte[0])*16 + finddec(byte[1]);
 }
 
 // Converts a string of hexadecimal numbers into an array of 
