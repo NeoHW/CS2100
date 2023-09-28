@@ -7,8 +7,8 @@ newl:  .asciiz "\n"
 main:
 	# Print the original content of array
 	# setup the parameter(s)
-	la $a0, array
-	li $a1, 10
+	la $a0, array	# $a0 = address of first element in array
+	li $a1, 10		# $a1 = num elements in array
 
 	# call the printArray function
 	jal printArray    # Make a function call to printArray()
@@ -24,11 +24,22 @@ main:
 
 	# Call the findMin function
 	# setup the parameter(s)
+	la   $a0, array	# $a0 = address of first element in array
+	addi $s0, $a0, 0
+	
+	sll $t0, $t0, 2
+	add $a0, $s0, $t0	# a0 = address of A[x]
+
+	sll $t1, $t1, 2
+	add $a1, $s0, $t1	# a1 = address of A[y]
+
 	# call the function
+	jal findMin    # Make a function call to findMin()
 
 
 	# Print the min item
 	# place the min item in $t3	for printing
+	lw $t3, 0($v0)
 
 	# Print an integer followed by a newline
 	li   $v0, 1   		# system call code for print_int
@@ -90,7 +101,21 @@ e1:
 #Output: $v0 contains the address of min item 
 #Purpose: Find and return the minimum item 
 #              between $a0 and $a1 (inclusive)
-#Registers used: <Fill in with your register usage>
+#Registers used: $t0, $t1, $t2, $t3, $t4
 #Assumption: Array element is word size (4-byte), $a0 <= $a1
 findMin:
-	jr $ra			# return from this function
+	addi $t1, $a0, 0	# $t1 is the pointer to the lower item
+	addi $t2, $a1, 0 	# $t2 is pointing beyond the higher item
+	addi $v0, $t1, 0	# $v0 = &min, let &min be &first item
+l2:
+	beq  $t1, $t2, e2
+	lw   $t0, 0($v0)	# $t0 be min item
+	lw   $t3, 0($t1)	# $t3 is current item
+	slt  $t4, $t3, $t0  # if curr item < min, $t4 = 1
+	beq  $t4, $0, c	    # if curr item > min, continue
+	addi $v0, $t1, 0	# else &min = &curr item
+c:
+	addi $t1, $t1, 4
+	j    l2				# Another iteration
+e2:
+	jr $ra				# return from this function
