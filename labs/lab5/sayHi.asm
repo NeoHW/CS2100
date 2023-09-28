@@ -26,5 +26,5 @@ sayHi:
 	li   $v0, 4    # system call code for print_string
 	la   $a0, str3 # address of string to print
 	syscall        # print the string
-		           # Use "jr" to go back to caller (main in this case)
+	jr $31         # Use "jr" to go back to caller (main in this case)
 
