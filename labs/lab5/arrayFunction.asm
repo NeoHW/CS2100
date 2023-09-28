@@ -24,14 +24,13 @@ main:
 
 	# Call the findMin function
 	# setup the parameter(s)
-	la   $a0, array	# $a0 = address of first element in array
-	addi $s0, $a0, 0
+	la   $a0, array		# $a0 = address of first element in array
+	
+	sll $t1, $t1, 2
+	add $a1, $a0, $t1	# a1 = address of A[y]
 	
 	sll $t0, $t0, 2
-	add $a0, $s0, $t0	# a0 = address of A[x]
-
-	sll $t1, $t1, 2
-	add $a1, $s0, $t1	# a1 = address of A[y]
+	add $a0, $a0, $t0	# a0 = address of A[x]
 
 	# call the function
 	jal findMin    # Make a function call to findMin()
@@ -40,6 +39,9 @@ main:
 	# Print the min item
 	# place the min item in $t3	for printing
 	lw $t3, 0($v0)
+
+	# OWN ADD IN : store the address of minimum item!
+	addi $s0, $v0, 0
 
 	# Print an integer followed by a newline
 	li   $v0, 1   		# system call code for print_int
@@ -51,8 +53,12 @@ main:
     syscall       		# print newline
 
 	#Calculate and print the index of min item
-	
+	la   $a0, array		# $a0 = address of first element in array
+	sub $t0, $s0, $a0	# difference in address ; rmb : $s0 is stored address of min element
+	srl $t0, $t0, 2		# /4 to get index
+
 	# Place the min index in $t3 for printing	
+	addi $t3, $t0, 0
 
 	# Print the min index
 	# Print an integer followed by a newline
