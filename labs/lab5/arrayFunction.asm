@@ -111,7 +111,8 @@ e1:
 #Assumption: Array element is word size (4-byte), $a0 <= $a1
 findMin:
 	addi $t1, $a0, 0	# $t1 is the pointer to the lower item
-	addi $t2, $a1, 0 	# $t2 is pointing beyond the higher item
+	addi $t2, $a1, 0 	# $t2 now points to higher element
+	addi $t2, $t2, 4	# add 4 to include the higher element
 	addi $v0, $t1, 0	# $v0 = &min, let &min be &first item
 l2:
 	beq  $t1, $t2, e2
