@@ -64,47 +64,99 @@ int32_t Memory(uint32_t Address, int32_t WrData, bool MemRead, bool MemWrite) {
 // If you need to define some macros, you can do so below this comment.
 
 #ifndef ASSIGNMENT2_QUESTION1A
+#define SELECT_INPUT(ctrl, in0, in1) ((ctrl) ? (in1) : (in0))
 
 uint8_t mux_u8(bool ctrl, uint8_t in0, uint8_t in1) {
-    if(ctrl) {
-        return in1;
-    } else {
-        return in0;
-    }
+    return SELECT_INPUT(ctrl, in0, in1);
 }
 
 uint32_t mux_u32(bool ctrl, uint32_t in0, uint32_t in1) {
-    if(ctrl) {
-        return in1;
-    } else {
-        return in0;
-    }
+    return SELECT_INPUT(ctrl, in0, in1);
 }
 
 int32_t mux_i32(bool ctrl, int32_t in0, int32_t in1) {
-    if(ctrl) {
-        return in1;
-    } else {
-        return in0;
-    }
+    return SELECT_INPUT(ctrl, in0, in1);
 }
 
 #endif  // End of Assignment 2, Question 1a
 
 #ifndef ASSIGNMENT2_QUESTION1B
 
+/*
+struct instr {
+    uint8_t opcode, rs, rt, rd, shamt, funct;
+    uint16_t immed;
+    uint32_t address;
+};
+*/
+
 void decode(uint32_t in, struct instr* insn) {
-    // TODO: Implement decode
+    if (in >> 26 == 0) { // in | 0xFC000000
+        insn->opcode = in >> 26;
+        insn->rs = in | 0x03E00000 >> 21;
+        insn->rt = in | 0x001F0000 >> 16;
+        insn->rd = in | 0x0000F800 >> 10;
+        insn->shamt = in | 0x000007C0 >> 6;
+        insn->funct = in | 0x0000003F;
+    } else {
+        insn->opcode = in >> 26;
+        insn->rs = in | 0x03E00000 >> 21;
+        insn->rt = in | 0x001F0000 >> 16;
+        insn->immed = in | 0x0000FFFF;
+        // insn->address = in | 0x03FFFFFF
+    }
 }
 
 #endif  // End of Assignment 2, Question 1b
 
 #ifndef ASSIGNMENT2_QUESTION2A
 
-void Control(uint8_t opcode, bool* _RegDst, bool* _ALUSrc, bool* _MemtoReg,
-             bool* _RegWrite, bool* _MemRead, bool* _MemWrite, bool* _Branch,
-             uint8_t* _ALUOp) {
-    // TODO: Implement Control
+void Control(uint8_t opcode, //
+            bool* _RegDst, //
+            bool* _ALUSrc, //
+            bool* _MemtoReg, //
+            bool* _RegWrite, //
+            bool* _MemRead, //
+            bool* _MemWrite, //
+            bool* _Branch, //
+            uint8_t* _ALUOp //
+            ) {
+
+    if (!opcode) *_RegDst = 1;
+    else *_RegDst = 0;
+
+    if (!opcode || opcode == 4) *_ALUSrc = 0;
+    else *_ALUSrc = 1;
+
+    if (opcode == 0x23) *_MemRead = 1; // lw
+    else *_MemRead = 0;
+
+    if (opcode == 0x2b) *_MemWrite = 1; // sw
+    else *_MemWrite = 0;
+
+    if (opcode == 4) *_Branch = 1; // beq
+    else *_Branch = 0;
+
+    if (opcode == 0x23) *_MemtoReg = 1; // MemtoReg 1 for lw
+    else *_MemtoReg = 0;
+
+    if (!opcode || opcode == 0x23) *_RegWrite = 1; // RegWrite 1 when R-tye or lw
+    else *_RegWrite = 0;
+
+    
+    switch(opcode) {
+	case 0x23: // lw
+	case 0x2b: // sw
+		*_ALUOp = 0;
+		break;
+	case 0x04: // beq
+		*_ALUOp = 1;
+		break;			
+	case 0x00: // R-type
+		*_ALUOp = 2;
+		break;			
+}
+
 }
 
 #endif  // End of Assignment 2, Question 2a
