@@ -145,17 +145,17 @@ void Control(uint8_t opcode, //
 
     
     switch(opcode) {
-	case 0x23: // lw
-	case 0x2b: // sw
-		*_ALUOp = 0;
-		break;
-	case 0x04: // beq
-		*_ALUOp = 1;
-		break;			
-	case 0x00: // R-type
-		*_ALUOp = 2;
-		break;			
-}
+        case 0x23: // lw
+        case 0x2b: // sw
+            *_ALUOp = 0;
+            break;
+        case 0x04: // beq
+            *_ALUOp = 1;
+            break;			
+        case 0x00: // R-type
+            *_ALUOp = 2;
+            break;			
+    }
 
 }
 
@@ -164,8 +164,29 @@ void Control(uint8_t opcode, //
 #ifndef ASSIGNMENT2_QUESTION2B
 
 uint8_t ALUControl(uint8_t ALUOp, uint8_t funct) {
-    // TODO: Implement ALUControl
-    return -1;
+    if (ALUOp == 2) { // R-type instruction
+		switch (funct) {
+			case 0x20:      // add
+                return 2;
+			case 0x22:      // sub
+                return 6;
+			case 0x24:      // and
+                return 0;
+			case 0x25:      // or
+                return 1;
+			case 0x27:      // nor
+                return 0xC;
+			case 0x2a:      // slt
+                return 7;
+			default:
+                error("Invalid funct code in R-type instruction\n");
+        }
+	} else { // Non R-type
+		if (ALUOp == 0)
+		   return 2; // Ask ALU to add (lw/sw)
+		if (ALUOp == 1)
+		   return 6; // Ask ALU to sub (beq)
+	}
 }
 
 #endif  // End of Assignment 2, Question 2b
