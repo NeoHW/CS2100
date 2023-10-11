@@ -194,8 +194,29 @@ uint8_t ALUControl(uint8_t ALUOp, uint8_t funct) {
 #ifndef ASSIGNMENT2_QUESTION2C
 
 int32_t ALU(int32_t in0, int32_t in1, uint8_t ALUControl, bool* ALUiszero) {
-    // TODO: Implement ALU
-    return -1;
+    int32_t result;
+	switch (ALUControl) {
+		case 0:
+			result = in0 & in1;
+			break;
+		case 1:
+			result = in0 | in1;
+			break;
+		case 2:
+			result = in0 + in1;
+			break;
+		case 6:
+			result = in0 - in1;
+			break;
+		case 7:
+			result = (int32_t)(in0 < in1);
+			break;
+		case 12:
+			result = ~(in0 | in1);
+			break;
+	}
+	*ALUiszero = (result == 0);
+	return(result);
 }
 
 #endif  // End of Assignment 2, Question 2c
