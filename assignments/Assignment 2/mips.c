@@ -1,5 +1,6 @@
 #include "mips.h"
 
+
 /******************************************************************************
  *      DO NOT MODIFY THE CODE BELOW
  ******************************************************************************/
@@ -57,14 +58,14 @@ int32_t Memory(uint32_t Address, int32_t WrData, bool MemRead, bool MemWrite) {
 }
 #endif
 /******************************************************************************
- *      DO NOT MODIFY THE CODE ABOVE
+ *      DO NOT MIDIFY THE CODE ABOVE
  ******************************************************************************/
 
 // Here starts your code for Assignment 2 Part A
 // If you need to define some macros, you can do so below this comment.
+#define SELECT_INPUT() return (ctrl) ? (in1) : (in0)
 
 #ifndef ASSIGNMENT2_QUESTION1A
-#define SELECT_INPUT() return (ctrl) ? (in1) : (in0)
 
 uint8_t mux_u8(bool ctrl, uint8_t in0, uint8_t in1) {
     SELECT_INPUT();
@@ -91,20 +92,25 @@ struct instr {
 */
 
 void decode(uint32_t in, struct instr* insn) {
-    if (in >> 26 == 0) { // in & 0xFC000000
-        insn->opcode = in >> 26;
-        insn->rs = (in & 0x03E00000) >> 21;
-        insn->rt = (in & 0x001F0000) >> 16;
-        insn->rd = (in & 0x0000F800) >> 11;
-        insn->shamt = (in & 0x000007C0) >> 6;
-        insn->funct = (in & 0x0000003F);
-    } else {
-        insn->opcode = in >> 26;
-        insn->rs = (in & 0x03E00000) >> 21;
-        insn->rt = (in & 0x001F0000) >> 16;
-        insn->immed = in & 0x0000FFFF;
-        insn->address = in & 0x03FFFFFF;    
-    }
+
+    insn->opcode = in >> 26;
+    insn->rs = (in & 0x03E00000) >> 21;
+    insn->rt = (in & 0x001F0000) >> 16;
+    insn->rd = (in & 0x0000F800) >> 11;
+    insn->shamt = (in & 0x000007C0) >> 6;
+    insn->funct = in & 0x0000003F;
+    insn->immed = in & 0x0000FFFF;
+    insn->address = in & 0x03FFFFFF;   
+
+    printf("\nopcode %d", insn->opcode);
+    printf("\nrs %d", insn->rs);
+    printf("\nrt %d", insn->rt);
+    printf("\nrd %d", insn->rd);
+    printf("\nshamt %d", insn->shamt);
+    printf("\nfunct %d", insn->funct);
+    printf("\nimmed %d", insn->immed);
+    printf("\naddress %d", insn->address);
+    printf("\n");
 }
 
 #endif  // End of Assignment 2, Question 1b
@@ -226,19 +232,19 @@ int32_t ALU(int32_t in0, int32_t in1, uint8_t ALUControl, bool* ALUiszero) {
 
 void execute(uint32_t insn) {
     // pointers to the control signals    
-    bool* RegDst = &_RegDst;
-    bool* ALUSrc = &_ALUSrc;
-    bool* MemtoReg = &_MemtoReg;
-    bool* RegWrite = &_RegWrite;
-    bool* MemRead = &_MemRead;
-    bool* MemWrite = &_MemWrite;
-    bool* Branch = &_Branch;
-    uint8_t* ALUOp = &_ALUOp;
-    uint8_t* ALUCtrl = &_ALUCtrl;
-    bool* ALUiszero = malloc(1);
+    bool *RegDst = &_RegDst;
+    bool *ALUSrc = &_ALUSrc;
+    bool *MemtoReg = &_MemtoReg;
+    bool *RegWrite = &_RegWrite;
+    bool *MemRead = &_MemRead;
+    bool *MemWrite = &_MemWrite;
+    bool *Branch = &_Branch;
+    uint8_t *ALUOp = &_ALUOp;
+    uint8_t *ALUCtrl = &_ALUCtrl;
+    bool *ALUiszero = malloc(1);
     
     // decode stage
-    struct instr* i;
+    struct instr *i = malloc(sizeof(struct instr));
     decode(insn, i);
 
     // Generate the control Signals
@@ -255,7 +261,7 @@ void execute(uint32_t insn) {
 
     // operands 1 & 2 for ALU
     int32_t ALUop1 = *RD1;
-    int32_t ALUop2 = mux_i32(ALUSrc, *RD2, i->immed);
+    int32_t ALUop2 = mux_i32(*ALUSrc, *RD2, i->immed);
 
     // ALU stage
     uint32_t result = ALU(ALUop1,ALUop2, *ALUCtrl, ALUiszero);
@@ -280,7 +286,7 @@ void execute(uint32_t insn) {
 
     // Set PC address to target PC address
     _PC = PCaddress;
-    
+
 }
 
 #endif  // End of Assignment 2, Question 3
