@@ -101,16 +101,6 @@ void decode(uint32_t in, struct instr* insn) {
     insn->funct = in & 0x0000003F;
     insn->immed = in & 0x0000FFFF;
     insn->address = in & 0x03FFFFFF;   
-
-    printf("\nopcode %d", insn->opcode);
-    printf("\nrs %d", insn->rs);
-    printf("\nrt %d", insn->rt);
-    printf("\nrd %d", insn->rd);
-    printf("\nshamt %d", insn->shamt);
-    printf("\nfunct %d", insn->funct);
-    printf("\nimmed %d", insn->immed);
-    printf("\naddress %d", insn->address);
-    printf("\n");
 }
 
 #endif  // End of Assignment 2, Question 1b
@@ -244,7 +234,8 @@ void execute(uint32_t insn) {
     bool *ALUiszero = malloc(1);
     
     // decode stage
-    struct instr *i = malloc(sizeof(struct instr));
+    struct instr instruction;
+    struct instr *i = &instruction;
     decode(insn, i);
 
     // Generate the control Signals
